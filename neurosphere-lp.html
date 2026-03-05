@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEUROSPHERE | AI活用型広告・採用サービス</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --teal:#3ecfb2;
+    --teal-dark:#2ab99d;
+    --bg:#f7fdfb;
+    --white:#ffffff;
+    --nav:#1a1a1a;
+    --text:#1a1a1a;
+    --sub:#555;
+    --muted:#999;
+    --border:rgba(62,207,178,0.18);
+    --border-gray:rgba(0,0,0,0.07);
+  }
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;overflow-x:hidden;}
+
+  /* STARS */
+  #stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+  /* ── NAV ── */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    height:56px;padding:0 48px;
+    display:flex;align-items:center;justify-content:space-between;
+    background:#1a1a1a;
+    border-bottom:1px solid rgba(255,255,255,0.07);
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:800;letter-spacing:2px;color:#fff;}
+  .logo-dots{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:18px;}
+  .dot{width:8px;height:8px;border-radius:50%;}
+  .d1{background:#4caf50;}.d2{background:#2196f3;}.d3{background:#f44336;}.d4{background:#ffeb3b;}
+  .nav-cta{
+    background:transparent;color:#fff;
+    padding:7px 20px;border-radius:4px;
+    font-size:12px;font-weight:600;letter-spacing:.5px;
+    border:1px solid rgba(255,255,255,0.25);cursor:pointer;
+    transition:border-color .2s,color .2s;
+  }
+  .nav-cta:hover{border-color:var(--teal);color:var(--teal);}
+
+  /* ── SECTION BASE ── */
+  section{position:relative;z-index:1;padding:96px 48px;}
+  .container{max-width:1040px;margin:0 auto;}
+  .sec-eyebrow{font-size:11px;font-weight:700;letter-spacing:2.5px;color:var(--teal-dark);margin-bottom:14px;text-transform:uppercase;}
+  .sec-title{font-size:clamp(24px,3.2vw,40px);font-weight:900;line-height:1.2;color:var(--text);margin-bottom:14px;}
+  .sec-desc{font-size:14px;color:var(--sub);line-height:1.85;max-width:520px;}
+
+  /* ── HERO ── */
+  .hero{min-height:100vh;display:flex;align-items:center;padding-top:120px;}
+  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;width:100%;}
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(62,207,178,0.09);border:1px solid rgba(62,207,178,0.25);
+    border-radius:4px;padding:5px 14px;
+    font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--teal-dark);
+    margin-bottom:28px;
+  }
+  .badge-pulse{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+  .hero h1{font-size:clamp(30px,4vw,52px);font-weight:900;line-height:1.12;margin-bottom:24px;letter-spacing:-.5px;}
+  .hero h1 em{font-style:normal;color:var(--teal-dark);}
+  .hero-pains{margin-bottom:28px;border-top:1px solid var(--border-gray);}
+  .pain{
+    display:flex;align-items:center;gap:10px;
+    font-size:13px;color:var(--sub);
+    padding:9px 0;border-bottom:1px solid var(--border-gray);
+  }
+  .pain-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);flex-shrink:0;}
+  .hero-lead{font-size:13px;color:var(--muted);line-height:1.85;margin-bottom:32px;}
+  .hero-lead strong{color:var(--sub);font-weight:600;}
+  .hero-btns{display:flex;gap:12px;}
+  .btn-primary{
+    background:var(--teal);color:#fff;
+    padding:13px 28px;border-radius:4px;
+    font-size:13px;font-weight:700;border:none;cursor:pointer;
+    box-shadow:0 4px 18px rgba(62,207,178,0.35);
+    transition:opacity .2s,transform .2s;
+  }
+  .btn-primary:hover{opacity:.88;transform:translateY(-1px);}
+  .btn-ghost{
+    background:transparent;color:var(--sub);
+    padding:13px 24px;border-radius:4px;
+    font-size:13px;font-weight:600;
+    border:1px solid var(--border-gray);cursor:pointer;
+    transition:border-color .2s,color .2s;
+  }
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal-dark);}
+
+  /* HERO RIGHT */
+  .hero-right{display:flex;flex-direction:column;gap:14px;}
+  .kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .kpi{
+    background:var(--white);border:1px solid var(--border);border-radius:8px;
+    padding:18px 12px;text-align:center;
+    box-shadow:0 2px 12px rgba(62,207,178,0.07);
+  }
+  .kpi-num{font-size:24px;font-weight:900;color:var(--teal-dark);}
+  .kpi-label{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5;}
+  .flow-box{
+    background:var(--white);border:1px solid var(--border);border-radius:8px;
+    padding:20px 22px;box-shadow:0 2px 12px rgba(62,207,178,0.07);
+  }
+  .flow-box-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--teal-dark);margin-bottom:14px;}
+  .flow-steps{display:flex;align-items:center;gap:6px;}
+  .fs{font-size:10px;color:var(--muted);text-align:center;}
+  .fs-num{
+    width:26px;height:26px;border-radius:50%;
+    background:rgba(62,207,178,0.1);border:1px solid rgba(62,207,178,0.3);
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;font-weight:800;color:var(--teal-dark);margin:0 auto 4px;
+  }
+  .fs-arr{color:rgba(62,207,178,0.4);font-size:12px;}
+
+  /* ── VIDEO SECTION ── */
+  .video-sec{background:var(--white);}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 20px;}
+  .tab{
+    padding:7px 16px;border-radius:4px;
+    font-size:11px;font-weight:700;letter-spacing:.5px;
+    border:1px solid var(--border-gray);color:var(--muted);
+    background:transparent;cursor:pointer;transition:all .18s;
+  }
+  .tab.on{background:var(--teal);color:#fff;border-color:var(--teal);}
+  .tab:hover:not(.on){border-color:var(--teal);color:var(--teal-dark);}
+
+  .c-outer{overflow:hidden;}
+  .c-track{display:flex;gap:16px;transition:transform .4s cubic-bezier(.4,0,.2,1);}
+  .v-card{
+    flex:0 0 calc(33.333% - 11px);
+    background:var(--bg);border:1px solid var(--border-gray);border-radius:8px;
+    overflow:hidden;cursor:pointer;
+    transition:border-color .25s,box-shadow .25s,transform .25s;
+  }
+  .v-card:hover{border-color:var(--teal);box-shadow:0 6px 24px rgba(62,207,178,0.15);transform:translateY(-3px);}
+  .v-thumb{width:100%;aspect-ratio:9/16;background:#eef8f5;position:relative;overflow:hidden;}
+  .v-thumb iframe{width:100%;height:100%;border:none;pointer-events:none;}
+  .v-overlay{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,0.1);opacity:0;transition:opacity .2s;z-index:2;
+  }
+  .v-card:hover .v-overlay{opacity:1;}
+  .v-play{
+    width:48px;height:48px;border-radius:50%;
+    background:var(--teal);display:flex;align-items:center;justify-content:center;
+    font-size:16px;color:#fff;box-shadow:0 4px 16px rgba(62,207,178,0.5);
+    transition:transform .2s;
+  }
+  .v-card:hover .v-play{transform:scale(1.08);}
+  .v-platform{
+    position:absolute;top:10px;right:10px;z-index:3;
+    font-size:10px;font-weight:700;color:#fff;
+    padding:3px 8px;border-radius:3px;
+  }
+  .v-info{padding:14px 16px;}
+  .v-type{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--teal-dark);margin-bottom:4px;}
+  .v-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:6px;line-height:1.4;}
+  .v-desc{font-size:11px;color:var(--muted);line-height:1.6;}
+  .v-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;}
+  .tag{font-size:10px;padding:3px 8px;border-radius:3px;background:rgba(62,207,178,0.08);color:var(--teal-dark);border:1px solid rgba(62,207,178,0.2);}
+
+  .c-nav{display:flex;align-items:center;justify-content:space-between;margin-top:18px;}
+  .c-dots{display:flex;gap:6px;align-items:center;}
+  .cdot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,0.12);cursor:pointer;transition:all .2s;}
+  .cdot.on{background:var(--teal);width:18px;border-radius:3px;}
+  .c-arrows{display:flex;gap:8px;}
+  .arr{
+    width:34px;height:34px;border-radius:4px;
+    border:1px solid var(--border-gray);background:var(--white);
+    color:var(--text);font-size:13px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .18s,color .18s;
+  }
+  .arr:hover{border-color:var(--teal);color:var(--teal-dark);}
+  .arr:disabled{opacity:.3;cursor:not-allowed;}
+
+  /* ── PROBLEM ── */
+  .problem-sec{background:var(--bg);}
+  .prob-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:36px;}
+  .prob-card{
+    background:var(--white);border:1px solid var(--border-gray);border-radius:8px;
+    padding:26px 22px;position:relative;overflow:hidden;
+    transition:box-shadow .2s,transform .2s;
+  }
+  .prob-card:hover{box-shadow:0 6px 24px rgba(62,207,178,0.1);transform:translateY(-2px);}
+  .prob-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+  .prob-card:nth-child(1)::after{background:var(--teal);}
+  .prob-card:nth-child(2)::after{background:#5ba4d4;}
+  .prob-card:nth-child(3)::after{background:#8b7cf0;}
+  .prob-num{font-size:36px;font-weight:900;color:rgba(62,207,178,0.1);margin-bottom:10px;line-height:1;}
+  .prob-title{font-size:14px;font-weight:800;margin-bottom:8px;}
+  .prob-card:nth-child(1) .prob-title{color:var(--teal-dark);}
+  .prob-card:nth-child(2) .prob-title{color:#5ba4d4;}
+  .prob-card:nth-child(3) .prob-title{color:#8b7cf0;}
+  .prob-desc{font-size:12px;color:var(--sub);line-height:1.75;}
+  .prob-summary{
+    margin-top:20px;padding:14px 22px;
+    background:rgba(62,207,178,0.06);border:1px solid rgba(62,207,178,0.18);border-radius:6px;
+    font-size:13px;font-weight:600;color:var(--sub);text-align:center;
+  }
+
+  /* ── PRICING ── */
+  .pricing-sec{background:var(--white);}
+  .plan-cat{
+    font-size:13px;font-weight:700;color:var(--text);
+    text-align:center;margin:36px 0 10px;
+    text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--teal);
+  }
+  .pt{background:var(--bg);border:1px solid var(--border-gray);border-radius:8px;overflow:hidden;}
+  .pt-row{display:grid;grid-template-columns:180px 1fr 1fr 1fr;border-bottom:1px solid var(--border-gray);}
+  .pt-row:last-child{border-bottom:none;}
+  .pt-cell{padding:16px 18px;font-size:13px;color:var(--sub);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:3px;}
+  .pt-head-row .pt-cell{background:rgba(62,207,178,0.07);font-weight:800;font-size:13px;color:var(--text);}
+  .pt-label-cell{align-items:flex-start;text-align:left;background:rgba(62,207,178,0.04) !important;font-weight:700;color:var(--text);font-size:13px;}
+  .pt-label-sub{font-size:11px;color:var(--muted);font-weight:400;margin-top:2px;}
+  .price-lg{font-size:17px;font-weight:900;color:var(--text);}
+  .price-sm{font-size:11px;color:var(--muted);}
+  .strike{text-decoration:line-through;color:var(--muted);font-size:12px;}
+  .accent{color:var(--teal-dark);font-weight:800;}
+  .pt-btn-row .pt-cell{padding:14px 18px;}
+  .plan-note{
+    margin-top:12px;padding:11px 18px;
+    background:rgba(62,207,178,0.06);border:1px solid rgba(62,207,178,0.18);border-radius:6px;
+    font-size:12px;font-weight:600;color:var(--teal-dark);text-align:center;
+  }
+
+  /* ── CTA ── */
+  .cta-sec{background:var(--bg);text-align:center;}
+  .cta-box{
+    max-width:640px;margin:0 auto;
+    background:var(--white);border:1px solid var(--border);border-radius:10px;
+    padding:56px 40px;
+    box-shadow:0 4px 30px rgba(62,207,178,0.1);
+  }
+  .cta-sec h2{font-size:clamp(22px,3vw,34px);font-weight:900;margin-bottom:14px;}
+  .cta-sec p{font-size:14px;color:var(--sub);line-height:1.85;margin-bottom:30px;}
+  .cta-note{font-size:12px;color:var(--teal-dark);margin-top:12px;font-weight:600;}
+
+  /* ── FOOTER ── */
+  footer{
+    background:#1a1a1a;color:rgba(255,255,255,0.4);
+    padding:28px 48px;display:flex;align-items:center;justify-content:space-between;
+    position:relative;z-index:1;font-size:11px;line-height:1.7;
+  }
+  footer strong{color:rgba(255,255,255,0.75);}
+
+  /* ── MODAL ── */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(240,252,249,0.6);backdrop-filter:blur(10px);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:opacity .25s;
+  }
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+  .modal{
+    background:var(--white);border:1px solid var(--border);border-radius:10px;
+    width:min(380px,88vw);overflow:hidden;
+    box-shadow:0 20px 60px rgba(62,207,178,0.18);
+    transform:scale(.96) translateY(8px);transition:transform .25s;
+  }
+  .modal-overlay.open .modal{transform:scale(1) translateY(0);}
+  .modal-vid{width:100%;aspect-ratio:9/16;background:#000;position:relative;}
+  .modal-vid iframe{width:100%;height:100%;border:none;}
+  .modal-close{
+    position:absolute;top:10px;right:10px;z-index:10;
+    width:30px;height:30px;border-radius:4px;
+    background:rgba(255,255,255,0.9);border:1px solid var(--border-gray);
+    color:var(--text);font-size:13px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .18s;
+  }
+  .modal-close:hover{border-color:var(--teal);}
+  .modal-body{padding:18px 20px;}
+  .modal-type{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--teal-dark);margin-bottom:5px;}
+  .modal-title{font-size:15px;font-weight:900;color:var(--text);margin-bottom:8px;line-height:1.35;}
+  .modal-desc{font-size:12px;color:var(--sub);line-height:1.7;margin-bottom:12px;}
+  .modal-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
+  .modal-foot{display:flex;gap:8px;}
+
+  @media(max-width:768px){
+    nav{padding:0 20px;}
+    section{padding:72px 20px;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-right{display:none;}
+    .v-card{flex:0 0 calc(80% - 8px);}
+    footer{flex-direction:column;gap:8px;padding:24px 20px;text-align:center;}
+  }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-dots">
+      <div class="dot d1"></div><div class="dot d2"></div>
+      <div class="dot d3"></div><div class="dot d4"></div>
+    </div>
+    NEUROSPHERE
+  </div>
+  <button class="nav-cta">お問合せ</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge"><div class="badge-pulse"></div>AI-POWERED ADVERTISING</div>
+        <h1>広告運用に、<br><em>AI革命</em>を。<br>成果に直結する<br>設計と運用。</h1>
+        <div class="hero-pains">
+          <div class="pain"><div class="pain-dot"></div>「AIを使いきれない。」</div>
+          <div class="pain"><div class="pain-dot"></div>「広告費をかけても応募が来ない。」</div>
+          <div class="pain"><div class="pain-dot"></div>「現場に定着しない。」</div>
+          <div class="pain"><div class="pain-dot"></div>「学ばせる時間がない。」</div>
+        </div>
+        <p class="hero-lead">そんな悩みはもう不要です。<br><strong>AI動画生成 × クリック後AI診断</strong>で、CTRとCVRを同時に底上げします。</p>
+        <div class="hero-btns">
+          <button class="btn-primary">まずは無料相談 →</button>
+          <button class="btn-ghost">資料を見る</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-num">8x</div><div class="kpi-label">従来比<br>制作速度</div></div>
+          <div class="kpi"><div class="kpi-num">¥0</div><div class="kpi-label">戦略策定費<br>期間限定</div></div>
+          <div class="kpi"><div class="kpi-num">10本</div><div class="kpi-label">初期動画<br>制作本数</div></div>
+        </div>
+        <div class="flow-box">
+          <div class="flow-box-title">広告運用 × クリック後体験の"掛け算"</div>
+          <div class="flow-steps">
+            <div class="fs"><div class="fs-num">1</div>広告</div>
+            <div class="fs-arr">→</div>
+            <div class="fs"><div class="fs-num">2</div>click</div>
+            <div class="fs-arr">→</div>
+            <div class="fs"><div class="fs-num">3</div>LP</div>
+            <div class="fs-arr">→</div>
+            <div class="fs"><div class="fs-num">4</div>AI診断</div>
+            <div class="fs-arr">→</div>
+            <div class="fs"><div class="fs-num">5</div>CV🎯</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section class="video-sec">
+  <div class="container">
+    <div class="sec-eyebrow">CREATIVE SAMPLES</div>
+    <h2 class="sec-title">AIが生成する<br>動画クリエイティブ</h2>
+    <p class="sec-desc">ターゲット・媒体・訴求ポイントに合わせて最適化した動画広告をご覧ください。</p>
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-cat="all">すべて</button>
+      <button class="tab" data-cat="recruit">採用・人材</button>
+      <button class="tab" data-cat="ai">AIソリューション</button>
+      <button class="tab" data-cat="instagram">Instagram</button>
+      <button class="tab" data-cat="tiktok">TikTok</button>
+    </div>
+    <div class="c-outer"><div class="c-track" id="track"></div></div>
+    <div class="c-nav">
+      <div class="c-dots" id="dots"></div>
+      <div class="c-arrows">
+        <button class="arr" id="prev">←</button>
+        <button class="arr" id="next">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem-sec">
+  <div class="container">
+    <div class="sec-eyebrow">PROBLEM</div>
+    <h2 class="sec-title">デジタル広告が抱える<br>3つのボトルネック</h2>
+    <p class="sec-desc">広告費をかけても成果に繋がらない根本的な原因があります。</p>
+    <div class="prob-grid">
+      <div class="prob-card">
+        <div class="prob-num">01</div>
+        <div class="prob-title">そもそも見られていない（PV不足）</div>
+        <div class="prob-desc">広告費をかけても、ターゲットに届いていない。クリエイティブの質・媒体設計が成否を決める。</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">02</div>
+        <div class="prob-title">見られても行動に繋がらない（低CVR）</div>
+        <div class="prob-desc">商品・サービスは悪くないのに、問い合わせ・応募・購入に至らない。クリック後のUX設計が鍵。</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">03</div>
+        <div class="prob-title">成約に繋がらない（低成約率）</div>
+        <div class="prob-desc">リードは来るが商談・採用・契約につながらない。応募の質を設計段階から高める必要がある。</div>
+      </div>
+    </div>
+    <div class="prob-summary">結果として、広告費はかさむものの成果（採用・売上・契約）に繋がっていない</div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-sec">
+  <div class="container">
+    <div class="sec-eyebrow">PRICING</div>
+    <h2 class="sec-title">3つのプランから<br>柔軟に選択可能</h2>
+    <p class="sec-desc">目的・予算に合わせて最適なプランをお選びください。</p>
+
+    <div class="plan-cat">動画制作</div>
+    <div class="pt">
+      <div class="pt-row pt-head-row">
+        <div class="pt-cell pt-label-cell"></div>
+        <div class="pt-cell">月10本プラン</div>
+        <div class="pt-cell">月15本プラン</div>
+        <div class="pt-cell">月20本プラン</div>
+      </div>
+      <div class="pt-row">
+        <div class="pt-cell pt-label-cell">月額料金</div>
+        <div class="pt-cell"><div class="price-lg">¥350,000</div><div class="price-sm">¥35,000 / 本</div></div>
+        <div class="pt-cell"><div class="price-lg">¥450,000</div><div class="price-sm">¥30,000 / 本</div></div>
+        <div class="pt-cell"><div class="price-lg">¥500,000</div><div class="price-sm accent">¥25,000 / 本</div></div>
+      </div>
+      <div class="pt-row">
+        <div class="pt-cell pt-label-cell">初期費用<div class="pt-label-sub">設定費・戦略策定費</div></div>
+        <div class="pt-cell"><span class="strike">¥300,000</span> → <span class="accent">¥0</span><div class="price-sm">期間限定で無料</div></div>
+        <div class="pt-cell"><span class="strike">¥300,000</span> → <span class="accent">¥0</span><div class="price-sm">期間限定で無料</div></div>
+        <div class="pt-cell"><span class="strike">¥300,000</span> → <span class="accent">¥0</span><div class="price-sm">期間限定で無料</div></div>
+      </div>
+      <div class="pt-row">
+        <div class="pt-cell pt-label-cell">SNS投稿<div class="pt-label-sub">TikTok, Instagram等</div></div>
+        <div class="pt-cell"><span class="strike">¥100,000〜</span> → <span class="accent">¥0</span><div class="price-sm">期間限定で無料</div></div>
+        <div class="pt-cell"><span class="strike">¥100,000〜</span> → <span class="accent">¥0</span><div class="price-sm">期間限定で無料</div></div>
+        <div class="pt-cell"><span class="strike">¥100,000〜</span> → <span class="accent">¥0</span><div class="price-sm">期間限定で無料</div></div>
+      </div>
+      <div class="pt-row pt-btn-row">
+        <div class="pt-cell pt-label-cell"></div>
+        <div class="pt-cell"><button class="btn-ghost" style="width:100%;padding:10px 0;font-size:12px">相談する</button></div>
+        <div class="pt-cell"><button class="btn-ghost" style="width:100%;padding:10px 0;font-size:12px">相談する</button></div>
+        <div class="pt-cell"><button class="btn-ghost" style="width:100%;padding:10px 0;font-size:12px">相談する</button></div>
+      </div>
+    </div>
+
+    <div class="plan-cat" style="margin-top:36px">広告運用</div>
+    <div class="pt">
+      <div class="pt-row pt-head-row">
+        <div class="pt-cell pt-label-cell"></div>
+        <div class="pt-cell" style="grid-column:span 3;font-weight:800">SNS広告運用</div>
+      </div>
+      <div class="pt-row">
+        <div class="pt-cell pt-label-cell">月額料金</div>
+        <div class="pt-cell" style="grid-column:span 3">
+          <span style="font-size:15px;font-weight:700;color:var(--sub)">広告費の</span>
+          <span style="font-size:26px;font-weight:900;color:var(--teal-dark)"> 20%</span>
+          <span style="font-size:15px;font-weight:700;color:var(--sub)"> / 月</span>
+        </div>
+      </div>
+    </div>
+    <div class="plan-note">✦ 初期費用・SNS投稿費は期間限定で無料。お早めにご相談ください。</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="container">
+    <div class="cta-box">
+      <h2>まずは無料相談から<br>はじめましょう</h2>
+      <p>採用コスト・広告費にお悩みの方、<br>AIを活用した次世代の広告運用をご提案します。</p>
+      <button class="btn-primary" style="font-size:14px;padding:14px 36px">まずは無料相談 →</button>
+      <div class="cta-note">✦ 戦略策定費（通常¥300,000）期間限定無料</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <strong>株式会社ニューロスフィア（NEUROSPHERE）</strong><br>
+    東京都港区西新橋1-6-12 アイオス虎ノ門4階　｜　代表：根来 実　｜　設立：2025年12月
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-vid" id="modalVid">
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-type" id="mType"></div>
+      <div class="modal-title" id="mTitle"></div>
+      <div class="modal-desc" id="mDesc"></div>
+      <div class="modal-tags" id="mTags"></div>
+      <div class="modal-foot">
+        <button class="btn-primary" style="flex:1;padding:10px">お問合せ</button>
+        <button class="btn-ghost" style="padding:10px 16px" id="modalClose2">閉じる</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// STARS
+const cv=document.getElementById('stars'),ctx=cv.getContext('2d');
+let W,H,stars=[];
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+function initS(){stars=Array.from({length:130},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.3,o:Math.random()*.25+.05,s:Math.random()*.07+.02}));}
+function draw(){ctx.clearRect(0,0,W,H);stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(62,207,178,${s.o})`;ctx.fill();s.o+=s.s*(Math.random()>.5?1:-1);s.o=Math.max(.03,Math.min(.3,s.o));});requestAnimationFrame(draw);}
+resize();initS();draw();
+window.addEventListener('resize',()=>{resize();initS();});
+
+// VIDEOS
+const videos=[
+  {cat:['all','recruit','instagram'],platform:'Instagram',pc:'#e1306c',type:'実写 / 成長環境訴求',title:'経理としての市場価値、あげませんか？',desc:'スピード感のある成長環境と、必須スキルが一気通貫で身につく環境を訴求。経理希望者へ絞ったアプローチ。',tags:['採用','経理','成長環境'],id:'1cucEQJdZAvoMElbGOiOtG1-Hdc4d3QQ3'},
+  {cat:['all','recruit','tiktok'],platform:'TikTok',pc:'#69c9d0',type:'実写 / 好奇心訴求',title:'製造業 業務紹介',desc:'未経験・経験者どちらも活躍できる製造現場をリアルに紹介。ワークライフバランスを訴求。',tags:['採用','製造業','未経験OK'],id:'1k6nre1oO9CHIlP-e1k2gomfYtR4XCWf8'},
+  {cat:['all','ai'],platform:'AI動画',pc:'#2ab99d',type:'アニメーション / 課題解決訴求',title:'独自のAIエージェント — AI動画を瞬時に作成',desc:'AIエージェントを活用したBPOサービスを紹介。制作スピードは最大で従来の8倍を実現。',tags:['AIソリューション','BPO','to B'],id:'1f0vetvoBFZPRhcjaTc5mt8Ys5OeUSeH0'},
+  {cat:['all','recruit','instagram'],platform:'Instagram',pc:'#e1306c',type:'実写 / 条件訴求',title:'社会人の70%が仕事に不満！？',desc:'衝撃的な数字でファーストビューを掴み、転職を考えるユーザーへの気づきを促す訴求パターン。',tags:['採用','中途','転職'],id:'17HUBnslCFFlD8L9TuXCndz-QbwUfo3fW'},
+  {cat:['all','ai','instagram'],platform:'Instagram',pc:'#e1306c',type:'アニメーション / スピード訴求',title:'AI×BPOであなたの課題を解決します',desc:'毎日進化する独自AIAGENTを活用し、制作から動画広告をまるっとお任せ。法人向けの訴求。',tags:['AIソリューション','to B','BPO'],id:'1a5MOGWzopvez3sG0voRDVImVWWAN49bm'},
+];
+
+let cat='all',off=0;
+const track=document.getElementById('track'),dotsEl=document.getElementById('dots'),prev=document.getElementById('prev'),next=document.getElementById('next');
+const getVis=()=>window.innerWidth<=768?1:3;
+const filtered=()=>videos.filter(v=>v.cat.includes(cat));
+
+function render(){
+  const d=filtered();track.innerHTML='';
+  d.forEach(v=>{
+    const c=document.createElement('div');c.className='v-card';
+    c.innerHTML=`
+      <div class="v-thumb">
+        <iframe src="https://drive.google.com/file/d/${v.id}/preview" allowfullscreen loading="lazy"></iframe>
+        <div class="v-overlay"><div class="v-play">▶</div></div>
+        <div class="v-platform" style="background:${v.pc}">${v.platform}</div>
+      </div>
+      <div class="v-info">
+        <div class="v-type">${v.type}</div>
+        <div class="v-title">${v.title}</div>
+        <div class="v-desc">${v.desc.slice(0,52)}…</div>
+        <div class="v-tags">${v.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>`;
+    c.querySelector('.v-thumb').addEventListener('click',()=>openModal(v));
+    track.appendChild(c);
+  });
+  off=0;update();
+}
+
+function update(){
+  const d=filtered(),vis=getVis(),max=Math.max(0,d.length-vis);
+  off=Math.max(0,Math.min(off,max));
+  const w=track.children[0]?.offsetWidth||0;
+  track.style.transform=`translateX(-${off*(w+16)}px)`;
+  prev.disabled=off===0;next.disabled=off>=max;
+  dotsEl.innerHTML='';
+  for(let i=0;i<Math.ceil(d.length/vis);i++){
+    const dot=document.createElement('div');
+    dot.className='cdot'+(Math.floor(off/vis)===i?' on':'');
+    dot.onclick=()=>{off=i*vis;update();};
+    dotsEl.appendChild(dot);
+  }
+}
+
+prev.onclick=()=>{off--;update();};
+next.onclick=()=>{off++;update();};
+window.addEventListener('resize',update);
+
+document.getElementById('tabs').addEventListener('click',e=>{
+  if(!e.target.classList.contains('tab'))return;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  e.target.classList.add('on');
+  cat=e.target.dataset.cat;render();
+});
+
+function openModal(v){
+  document.getElementById('modalVid').innerHTML=`<button class="modal-close" id="mc2">✕</button><iframe src="https://drive.google.com/file/d/${v.id}/preview" style="width:100%;height:100%;border:none;" allowfullscreen allow="autoplay"></iframe>`;
+  document.getElementById('mc2').onclick=closeModal;
+  document.getElementById('mType').textContent=v.type;
+  document.getElementById('mTitle').textContent=v.title;
+  document.getElementById('mDesc').textContent=v.desc;
+  document.getElementById('mTags').innerHTML=v.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+document.getElementById('modalClose').onclick=closeModal;
+document.getElementById('modalClose2').onclick=closeModal;
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeModal();});
+
+render();
+</script>
+</body>
+</html>
